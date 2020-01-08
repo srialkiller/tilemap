@@ -9,7 +9,15 @@ class Player(pg.sprite.Sprite):
         self.groups = game.all_sprites
         pg.sprite.Sprite.__init__(self, self.groups)
         self.game = game
-        self.image = game.player_img
+        self.image_states = {
+            "right": pg.transform.scale(game.player_lr, (60, 60)),
+            "left": pg.transform.flip(
+                pg.transform.scale(game.player_lr, (60, 60)), True, False),
+            "up": pg.transform.scale(game.player_u, (60, 60)),
+            "down": pg.transform.scale(game.player_d, (60, 60))
+        }
+        self.current_state = "right"
+        self.image = self.image_states[self.current_state]
         self.image = pg.transform.scale(self.image, (60, 60))
         self.rect = self.image.get_rect()
         self.vel = vec(0, 0)
@@ -20,12 +28,16 @@ class Player(pg.sprite.Sprite):
         keys = pg.key.get_pressed()
         if keys[pg.K_LEFT] or keys[pg.K_a]:
             self.vel.x = -PLAYER_SPEED
+            self.current_state = "left"
         if keys[pg.K_RIGHT] or keys[pg.K_d]:
             self.vel.x = PLAYER_SPEED
+            self.current_state = "right"
         if keys[pg.K_UP] or keys[pg.K_w]:
             self.vel.y = -PLAYER_SPEED
+            self.current_state = "up"
         if keys[pg.K_DOWN] or keys[pg.K_s]:
             self.vel.y = PLAYER_SPEED
+            self.current_state = "down"
         if self.vel.x != 0 and self.vel.y != 0:
             self.vel *= 0.7071
 
@@ -51,6 +63,7 @@ class Player(pg.sprite.Sprite):
 
     def update(self):
         self.get_keys()
+        self.image = self.image_states[self.current_state]
         self.pos += self.vel * self.game.dt
         self.rect.x = self.pos.x
         self.collide_with_walls('x')

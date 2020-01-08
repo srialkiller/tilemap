@@ -20,4 +20,6 @@ GRIDHEIGHT = HEIGHT / TILESIZE
 
 # Player settings
 PLAYER_SPEED = 300
-PLAYER_IMG = 'tile_0026.png'
+PLAYER_LR = 'tile_0026.png'
+PLAYER_D = 'tile_0024.png'
+PLAYER_U = 'tile_0025.png'
